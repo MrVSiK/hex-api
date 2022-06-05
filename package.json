@@ -1,0 +1,43 @@
+{
+  "name": "select",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./build/index.js",
+  "scripts": {
+    "test": "mocha",
+    "dev": "nodemon ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrVSiK/select.git"
+  },
+  "keywords": [
+    "Typescript",
+    "Mocha",
+    "Fastify"
+  ],
+  "author": "Srinivasa Varanasi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrVSiK/select/issues"
+  },
+  "homepage": "https://github.com/MrVSiK/select#readme",
+  "dependencies": {
+    "@azure/storage-blob": "^12.10.0",
+    "@prisma/client": "^3.14.0",
+    "dotenv": "^16.0.1",
+    "fastify": "^3.29.0",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.16",
+    "prisma": "^3.14.0",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.6.4"
+  }
+}
