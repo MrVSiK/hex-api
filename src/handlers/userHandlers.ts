@@ -2,6 +2,7 @@ import { RouteHandlerMethod } from "fastify";
 import { PrismaClient } from '@prisma/client';
 import { ulid } from "ulid";
 import { randomBytes, createHash } from "crypto";
+import { sign } from "jsonwebtoken";
 
 const prisma = new PrismaClient()
 
@@ -90,7 +91,7 @@ export const Login: RouteHandlerMethod = (req, res) => {
 
         if(VerifyPassword(plainTextPassword, password)){
             res.send({
-                message: 'Successfully logged in'
+                token: sign({ id: id }, process.env["JWT_SECRET"] as string, { expiresIn: '1h' })
             })
             return;
         }

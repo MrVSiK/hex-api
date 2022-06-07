@@ -27,11 +27,13 @@
     "@prisma/client": "^3.14.0",
     "dotenv": "^16.0.1",
     "fastify": "^3.29.0",
+    "jsonwebtoken": "^8.5.1",
     "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
     "@types/chai": "^4.3.1",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/mocha": "^9.1.1",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",

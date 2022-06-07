@@ -5,7 +5,7 @@ const ImageRoutes: FastifyPluginCallback = (server, _, done) => {
 
     // Send an image
     // URL: /image/user/{id}
-    server.post("/user/:userid", SendOneImage);
+    server.post("/", SendOneImage);
 
     // Get an image
     // URL: /image/:imageid

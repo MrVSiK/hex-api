@@ -1,7 +1,10 @@
 import { ContainerClient } from "@azure/storage-blob";
 import { RouteHandlerMethod } from "fastify";
 import Storage from "./storageHandlers";
+import { verify } from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 
 // export const GetOneImage: RouteHandlerMethod = (req, res) => {
 //     const { imageid } = req.params as {
@@ -88,16 +91,11 @@ import Storage from "./storageHandlers";
 //     })
 // }
 
+export const CheckIfTokenHasId = (token: any): token is { id: string } => {
+  return (token as { id: string }).id !== undefined;
+};
+
 export const SendOneImage: RouteHandlerMethod = (req, res) => {
-  const { userid } = req.params as {
-    userid: unknown;
-  };
-
-  if (typeof userid !== "string") {
-    res.status(404).send();
-    return;
-  }
-
   const { token } = req.headers;
 
   if (!token) {
@@ -110,26 +108,54 @@ export const SendOneImage: RouteHandlerMethod = (req, res) => {
     return;
   }
 
-  const { image, name } = req.body as {
-    image: unknown;
-    name: unknown;
-  };
+  const decodedToken = verify(token, process.env["JWT_SECRET"] as string);
 
-  if (typeof image !== "string" || typeof name !== "string") {
-    res.status(404).send();
+  if (!CheckIfTokenHasId(decodedToken)) {
+    res.status(401).send();
     return;
   }
 
-  const containerClient = Storage.getContainerClient() as ContainerClient;
-  const blobClient = containerClient.getBlockBlobClient(name);
-  blobClient
-    .uploadData(Buffer.from(image, "base64"))
-    .then((response) => {
-      if (response._response.status >= 200 && response._response.status < 300) {
-        res.send({
-          message: `File has been uploaded: ${response.requestId}`,
-        });
+  prisma.user
+    .findUnique({
+      where: {
+        id: decodedToken.id,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        res.status(401).send();
+        return;
       }
+      const { image, name } = req.body as {
+        image: unknown;
+        name: unknown;
+      };
+
+      if (typeof image !== "string" || typeof name !== "string") {
+        res.status(401).send();
+        return;
+      }
+
+      const containerClient = Storage.getContainerClient() as ContainerClient;
+      const blobClient = containerClient.getBlockBlobClient(name);
+      blobClient
+        .uploadData(Buffer.from(image, "base64"))
+        .then((response) => {
+          if (
+            response._response.status >= 200 &&
+            response._response.status < 300
+          ) {
+            res.send({
+              message: `File has been uploaded: ${response.requestId}`,
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send({
+            message: err.name,
+          });
+        });
     })
     .catch((err) => {
       console.error(err);
