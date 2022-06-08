@@ -1,5 +1,5 @@
 import type { FastifyPluginCallback } from "fastify";
-import { SendOneImage } from "../handlers/imageHandlers";
+import { SendOneImage, GetOneImage } from "../handlers/imageHandlers";
 
 const ImageRoutes: FastifyPluginCallback = (server, _, done) => {
 
@@ -9,7 +9,7 @@ const ImageRoutes: FastifyPluginCallback = (server, _, done) => {
 
     // Get an image
     // URL: /image/:imageid
-    // server.get("/:imageid", GetOneImage);
+    server.post("/file", GetOneImage);
 
     // Get all images for an user
     // URL: /image/user/:userid
