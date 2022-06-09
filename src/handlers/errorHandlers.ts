@@ -13,7 +13,7 @@ import type {
       case "P2002": {
         res.status(400).send({
           message: "Unique Constraint Failure",
-          error: err.message,
+          error: err.meta ? err.meta.target : err.message,
         });
         break;
       }
