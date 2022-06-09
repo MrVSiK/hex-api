@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { ulid } from "ulid";
 import { randomBytes, createHash } from "crypto";
 import { sign } from "jsonwebtoken";
+import { PrismaClientKnownRequestErrorHandler, PrismaClientUnknownRequestErrorHandler, PrismaClientValidationErrorHandler } from "./errorHandlers";
+import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient()
 
@@ -42,9 +44,16 @@ export const VerifyPassword = (password: string, hash: string): boolean => {
 
 export const Register: RouteHandlerMethod = (req, res) => {
     const { email, password } = req.body as {
-        email: string;
-        password: string;
+        email: unknown;
+        password: unknown;
     };
+
+    if(typeof email !== "string" || typeof password !== "string"){
+        res.status(404).send({
+            message: 'Email or password not found'
+        });
+        return;
+    }
 
     prisma.user.create({
         data: {
@@ -58,9 +67,18 @@ export const Register: RouteHandlerMethod = (req, res) => {
         })
     }).catch(err => {
         if(process.env.NODE_ENV !== "production") console.error(err);
-        res.status(500).send({
-            message: err
-        })
+        if (err instanceof PrismaClientKnownRequestError) {
+            PrismaClientKnownRequestErrorHandler(err, res);
+          } else if (err instanceof PrismaClientUnknownRequestError) {
+            PrismaClientUnknownRequestErrorHandler(err, res);
+          } else if (err instanceof PrismaClientValidationError) {
+            PrismaClientValidationErrorHandler(err, res);
+          } else {
+            res.status(500).send({
+              message: "Error",
+              error: err.message,
+            });
+        }
     })
 }
 
@@ -101,8 +119,17 @@ export const Login: RouteHandlerMethod = (req, res) => {
         })
     }).catch(err => {
         if(process.env.NODE_ENV !== "production") console.error(err);
-        res.status(500).send({
-            message: err
-        })
+        if (err instanceof PrismaClientKnownRequestError) {
+            PrismaClientKnownRequestErrorHandler(err, res);
+          } else if (err instanceof PrismaClientUnknownRequestError) {
+            PrismaClientUnknownRequestErrorHandler(err, res);
+          } else if (err instanceof PrismaClientValidationError) {
+            PrismaClientValidationErrorHandler(err, res);
+          } else {
+            res.status(500).send({
+              message: "Error",
+              error: err.message,
+            });
+        }
     })
 }

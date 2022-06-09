@@ -11,13 +11,6 @@ const ImageRoutes: FastifyPluginCallback = (server, _, done) => {
     // URL: /image/:imageid
     server.post("/file", GetOneImage);
 
-    // Get all images for an user
-    // URL: /image/user/:userid
-    // server.get("/user/:userid", GetAllImages);
-
-    // Delete an image
-    // URL: /image/:imageid
-    // server.delete("/:imageid", DeleteOneImage);
 
     done();
 }
