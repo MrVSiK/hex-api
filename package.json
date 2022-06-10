@@ -5,7 +5,10 @@
   "main": "./build/index.js",
   "scripts": {
     "test": "mocha",
-    "dev": "nodemon ./src/index.ts"
+    "dev": "nodemon ./src/index.ts",
+    "set-db": "prisma generate",
+    "start": "node ./build/index.js",
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
