@@ -16,7 +16,7 @@ server.register(UserRoutes, { prefix: "/user" });
 
 storage.then(() => {
   server
-    .listen(PORT)
+    .listen(PORT, "0.0.0.0")
     .then((add) => {
       console.log(`Server has started: ${add}`);
     })
