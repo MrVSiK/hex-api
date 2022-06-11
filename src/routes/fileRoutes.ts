@@ -3,13 +3,13 @@ import { SendOnefile, GetOnefile } from "../handlers/fileHandlers";
 
 const FileRoutes: FastifyPluginCallback = (server, _, done) => {
 
-    // Send an File
-    // URL: /File/user/{id}
+    // Send a File
+    // URL: /file/user/{id}
     server.post("/", SendOnefile);
 
-    // Get an File
-    // URL: /File/:Fileid
-    server.post("/file", GetOnefile);
+    // Get a File
+    // URL: /file/:Fileid
+    server.post("/search", GetOnefile);
 
 
     done();

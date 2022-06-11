@@ -11,7 +11,7 @@ const server = fastify({
 });
 const storage = Storage.init(process.env["AZURE_STORAGE"] as string);
 
-server.register(FileRoutes, { prefix: "/image" });
+server.register(FileRoutes, { prefix: "/file" });
 server.register(UserRoutes, { prefix: "/user" });
 
 storage.then(() => {
