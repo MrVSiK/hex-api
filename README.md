@@ -1,6 +1,6 @@
-# hex storage
+# hex api
 
-**hex-storage** is a service which will allow users to save files in Azure Blob Storage. It can be accessed by the companion CLI, [hex-cli](https://github.com/MrVSiK/hex-cli).
+**hex-api** is a service which will allow users to save files in Azure Blob Storage. It can be accessed by the companion CLI, [hex-cli](https://github.com/MrVSiK/hex-cli).
 
 Files are uploaded in base64 form via a POST request to the API. JSON web tokens are used to authenticate a user.
 
