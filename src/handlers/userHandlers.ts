@@ -90,7 +90,8 @@ export const Login: RouteHandlerMethod = (req, res) => {
 
     if(typeof email !== "string"){
         res.status(404).send({
-            message: 'Email missing'
+            message: 'Email missing',
+            received: email
         })
         return;
     }
@@ -142,7 +143,7 @@ export const Login: RouteHandlerMethod = (req, res) => {
           } else {
             res.status(500).send({
               message: "Error",
-              error: err.message,
+              error: err,
             });
         }
     })

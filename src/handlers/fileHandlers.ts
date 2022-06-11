@@ -12,16 +12,20 @@ export const CheckIfTokenHasId = (token: any): token is { id: string } => {
   return (token as { id: string }).id !== undefined;
 };
 
-export const SendOneImage: RouteHandlerMethod = (req, res) => {
+export const SendOnefile: RouteHandlerMethod = (req, res) => {
   const { token } = req.headers;
 
   if (!token) {
-    res.status(401).send();
+    res.status(401).send({
+      message: 'token not found'
+    });
     return;
   }
 
   if (token instanceof Array) {
-    res.status(401).send();
+    res.status(401).send({
+      message: 'token cannot be an instance of Array'
+    });
     return;
   }
 
@@ -47,7 +51,9 @@ export const SendOneImage: RouteHandlerMethod = (req, res) => {
   }
 
   if (!CheckIfTokenHasId(decodedToken)) {
-    res.status(401).send();
+    res.status(401).send({
+      message: "Invalid Token"
+    });
     return;
   }
 
@@ -59,23 +65,27 @@ export const SendOneImage: RouteHandlerMethod = (req, res) => {
     })
     .then((user) => {
       if (!user) {
-        res.status(401).send();
+        res.status(404).send({
+          message: 'No user found'
+        });
         return;
       }
-      const { image, name } = req.body as {
-        image: unknown;
+      const { file, name } = req.body as {
+        file: unknown;
         name: unknown;
       };
 
-      if (typeof image !== "string" || typeof name !== "string") {
-        res.status(401).send();
+      if (typeof file !== "string" || typeof name !== "string") {
+        res.status(401).send({
+          message: 'Invalid file or name'
+        });
         return;
       }
 
       const containerClient = Storage.getContainerClient() as ContainerClient;
       const blobClient = containerClient.getBlockBlobClient(name);
       blobClient
-        .uploadData(Buffer.from(image, "base64"))
+        .uploadData(Buffer.from(file, "base64"))
         .then((response) => {
           if (
             response._response.status >= 200 &&
@@ -111,16 +121,20 @@ export const SendOneImage: RouteHandlerMethod = (req, res) => {
 };
 
 
-export const GetOneImage: RouteHandlerMethod = (req, res) => {
+export const GetOnefile: RouteHandlerMethod = (req, res) => {
   const { token } = req.headers;
 
   if (!token) {
-    res.status(401).send();
+    res.status(401).send({
+      message: 'token not found'
+    });
     return;
   }
 
   if (token instanceof Array) {
-    res.status(401).send();
+    res.status(401).send({
+      message: 'token cannot be an instance of Array'
+    });
     return;
   }
 

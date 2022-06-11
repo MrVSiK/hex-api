@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import ImageRoutes from "./routes/imageRoutes";
+import FileRoutes from "./routes/fileRoutes";
 import UserRoutes from "./routes/userRoutes";
 import { config } from "dotenv";
 import Storage from "./handlers/storageHandlers";
@@ -11,7 +11,7 @@ const server = fastify({
 });
 const storage = Storage.init(process.env["AZURE_STORAGE"] as string);
 
-server.register(ImageRoutes, { prefix: "/image" });
+server.register(FileRoutes, { prefix: "/image" });
 server.register(UserRoutes, { prefix: "/user" });
 
 storage.then(() => {
