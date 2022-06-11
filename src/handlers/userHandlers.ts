@@ -84,8 +84,22 @@ export const Register: RouteHandlerMethod = (req, res) => {
 
 export const Login: RouteHandlerMethod = (req, res) => {
     const { email, password } = req.body as {
-        email: string;
-        password: string;
+        email: unknown;
+        password: unknown;
+    }
+
+    if(typeof email !== "string"){
+        res.status(404).send({
+            message: 'Email missing'
+        })
+        return;
+    }
+
+    if(typeof password !== "string"){
+        res.status(404).send({
+            message: 'Password missing'
+        })
+        return;
     }
 
     const plainTextPassword = password;
@@ -109,7 +123,7 @@ export const Login: RouteHandlerMethod = (req, res) => {
 
         if(VerifyPassword(plainTextPassword, password)){
             res.send({
-                token: sign({ id: id }, process.env["JWT_SECRET"] as string, { expiresIn: '1h' })
+                token: sign({ id: id }, process.env["JWT_SECRET"] as string)
             })
             return;
         }
